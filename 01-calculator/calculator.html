@@ -1,0 +1,115 @@
+<html>
+<head>
+  <script src="https://unpkg.com/vue"></script>
+  <style>
+  .pull-left {
+    float: left;
+  }
+  .btn {
+    margin: -1px 0 0 -1px;
+    width: 50px;
+    height: 50px;
+    border: 1px solid #ddd;
+    outline: none;
+  }
+  .btn:active {
+    background: #eee;
+  }
+  .operator {
+    background: #eee;
+  }
+  .operator:active {
+    background: #e0e0e0;
+  }
+  .numbers {
+    position: relative;
+    width: 148px;
+  }
+  .operators {
+    position: relative;
+    margin: 0 0 0 -1px;
+    width: 50px;
+  }
+  .display {
+    margin: 0 0 0 -1px;
+    padding: 0 10px;
+    width: 197px;
+    height: 50px;
+    border: 1px solid #ddd;
+    font-weight: 600;
+    font-size: 24px;
+  }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <input class="display" type="text" :value="displayValue" readonly><br>
+    <div class="numbers pull-left">
+      <button class="btn pull-left" type="button" v-for="num, idx in [1,2,3,4,5,6,7,8,9,0]" :key="idx" @click="setDisplay(num)">{{ num }}</button>
+      <button class="btn pull-left" type="button" @click="clear">AC</button>
+      <button class="btn pull-left" type="button" @click="calulate">=</button>
+    </div>
+    <div class="operators pull-left">
+      <operator class="btn operator" v-for="oper, idx in ['+','-','*','/']"  :key="idx" :text="oper" @click.native="setOperator(oper)"/>
+    </div>
+  </div>
+
+  <script>
+  Vue.component('operator', {
+    props: ['text'],
+    template: '<button type="button">{{ text }}</button>',
+  });
+
+  var app = new Vue({
+    el: '#app',
+    data: {
+      operator: '',
+      value: '0',
+      displayValue: '0',
+    },
+    computed: {
+      computedDisplayValue: function() {
+        if (isNaN(this.displayValue)) {
+          return 0;
+        }
+        return Number(this.displayValue);
+      }
+    },
+    methods: {
+      setDisplay: function (num) {
+        if (isNaN(this.displayValue) || this.displayValue === '0' || this.displayValue === this.value) {
+          this.displayValue = num.toString();
+        } else {
+          this.displayValue += num.toString();
+        }
+      },
+      setOperator: function (operator) {
+        this.calulate();
+        this.value = this.displayValue;
+        this.operator = operator;
+      },
+      calulate: function () {
+        if (!this.operator) {
+          this.value = this.displayValue;
+          return;
+        }
+        var a = Number(this.value || 0);
+        var b = this.computedDisplayValue;
+        switch (this.operator) {
+          case '+': this.displayValue = a + b; break;
+          case '-': this.displayValue = a - b; break;
+          case '*': this.displayValue = a * b; break;
+          case '/': this.displayValue = a / b; break;
+        }
+        this.operator = '';
+      },
+      clear: function () {
+        this.displayValue = '0';
+        this.operator = '';
+        this.numbers = [];
+      },
+    }
+  });
+  </script>
+</body>
+</html>

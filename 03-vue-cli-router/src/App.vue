@@ -1,12 +1,16 @@
 <template>
   <div id="app">
+    <MenuItem/>
     <router-view/>
   </div>
 </template>
 
 <script>
+import MenuItem from './components/MenuItem';
+
 export default {
   name: 'App',
+  components: { MenuItem },
 };
 </script>
 

@@ -17,9 +17,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-    ul {
-        margin: 0;
-        padding: 0;
-        list-style: none;
-    }
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
 </style>
